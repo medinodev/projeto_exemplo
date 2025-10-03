@@ -8,14 +8,12 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import br.unifor.travobasic.R
-import br.unifor.travobasic.model.Registro
-import br.unifor.travobasic.retrofit.TravoService
+import br.unifor.travobasic.model.RegistroRequest
+import br.unifor.travobasic.retrofit.RetrofitService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class RegistroActivity : AppCompatActivity() {
 
@@ -43,22 +41,17 @@ class RegistroActivity : AppCompatActivity() {
             val telefone = edTelefone.text.toString()
             val senha = edSenha.text.toString()
 
-            val registro = Registro(
+            val registroRequest = RegistroRequest(
                 nomeFantasia,
                 telefone,
                 email,
                 senha
             )
 
-            val retrofit = Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:3000/rest/v1/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-
-            val travoService = retrofit.create(TravoService::class.java)
+            val travoServiceAPI = RetrofitService.getTravoServiceAPI()
 
             CoroutineScope(Dispatchers.IO).launch {
-                val response = travoService.registrar(registro)
+                val response = travoServiceAPI.registrar(registroRequest)
                 if(response.isSuccessful){
                     withContext(Dispatchers.Main){
                         Toast.makeText(

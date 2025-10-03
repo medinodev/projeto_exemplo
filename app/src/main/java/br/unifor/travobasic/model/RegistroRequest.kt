@@ -2,7 +2,7 @@ package br.unifor.travobasic.model
 
 import com.google.gson.annotations.SerializedName
 
-data class Registro(
+data class RegistroRequest(
     @SerializedName("nome_fantasia")
     val nomeFantasia:String,
     val telefone: String,
